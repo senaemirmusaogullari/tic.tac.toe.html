@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      button {
+        width: 100px;
+        height: 100px;
+        font-size: 80px;
+        font-weight: bold;
+      }
+      td {
+        border: 1px solid black;
+        border-collapse: collapse;
+      }
+
+      div {
+        width: 310px;
+        position: relative;
+        top: 100px;
+        left: 400px;
+        text-align: center;
+      }
+
+      a:link,
+      a:visited {
+        background-color: darkcyan;
+        color: white;
+        padding: 14px 25px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-family: Arial, Helvetica, sans-serif;
+        border-radius: 10px;
+        margin-top: 10px;
+      }
+
+      a:hover,
+      a:active {
+        background-color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h1>TIC TAC TOE</h1>
+      <table>
+        <tr>
+          <td><button id="0" onclick="hamleYap(this.id)">&nbsp;</button></td>
+          <td><button id="1" onclick="hamleYap(this.id)">&nbsp;</button></td>
+          <td><button id="2" onclick="hamleYap(this.id)">&nbsp;</button></td>
+        </tr>
+        <tr>
+          <td><button id="3" onclick="hamleYap(this.id)">&nbsp;</button></td>
+          <td><button id="4" onclick="hamleYap(this.id)">&nbsp;</button></td>
+          <td><button id="5" onclick="hamleYap(this.id)">&nbsp;</button></td>
+        </tr>
+        <tr>
+          <td><button id="6" onclick="hamleYap(this.id)">&nbsp;</button></td>
+          <td><button id="7" onclick="hamleYap(this.id)">&nbsp;</button></td>
+          <td><button id="8" onclick="hamleYap(this.id)">&nbsp;</button></td>
+        </tr>
+      </table>
+      <a href="#" onclick="oyunuSifirla()">Yeni Oyun</a>
+    </div>
+
+    <script>
+      // ödev : bilgisayar hamle yaparken önce kendi kazanabileceği bir hamle var mı diye baksın
+      // yoksa oyuncunun kazanabileceği hamle varsa onu engellesin
+      "use strict"; // kısıtlı mod
+
+      const oyunDurumu = ["", "", "", "", "", "", "", "", ""];
+
+      const oyuncuKazananSerisi = "XXX";
+      const pcKazanmaSerisi = "OOO";
+
+      function kazananKontrol(kontrolParam) {
+        // aşağıdaki if/else if leri for döngüsüne çevirin
+        if (
+          oyunDurumu[0] + oyunDurumu[1] + oyunDurumu[2] === kontrolParam || // yatayda kazanan
+          oyunDurumu[3] + oyunDurumu[4] + oyunDurumu[5] === kontrolParam ||
+          oyunDurumu[6] + oyunDurumu[7] + oyunDurumu[8] === kontrolParam
+        ) {
+          alert(kontrolParam + " kazandı. Tebrikler");
+        } else if (
+          oyunDurumu[0] + oyunDurumu[3] + oyunDurumu[6] === kontrolParam || // dikayde kazanan
+          oyunDurumu[1] + oyunDurumu[4] + oyunDurumu[7] === kontrolParam ||
+          oyunDurumu[2] + oyunDurumu[5] + oyunDurumu[8] === kontrolParam
+        ) {
+          alert(kontrolParam + " kazandı. Tebrikler");
+        } else if (
+          // bu hariç diğerlerini for döngüsü olarak yazın
+          oyunDurumu[0] + oyunDurumu[4] + oyunDurumu[8] === kontrolParam || // çaprazda kazanan
+          oyunDurumu[2] + oyunDurumu[4] + oyunDurumu[6] === kontrolParam
+        ) {
+          alert(kontrolParam + " kazandı. Tebrikler");
+        }
+      }
+
+      function oyunuSifirla() {
+        for (let i = 0; i < oyunDurumu.length; i++) {
+          oyunDurumu[i] = "";
+          let btn = document.getElementById(i);
+          btn.innerHTML = "&nbsp;";
+          btn.disabled = false;
+        }
+      }
+
+      function hamleYap(btnId) {
+        const btnOyuncu = document.getElementById(btnId);
+
+        oyunDurumu[btnId] = "X";
+        btnOyuncu.innerHTML = "X";
+        btnOyuncu.disabled = true;
+        btnOyuncu.style.color = "black";
+
+        setTimeout(function () {
+          kazananKontrol(oyuncuKazananSerisi);
+        }, 1000);
+
+        while (true) {
+          let rastgeleSayi = Math.random() * 10;
+          rastgeleSayi = Math.floor(rastgeleSayi);
+
+          rastgeleSayi = rastgeleSayi % 9;
+          console.log(rastgeleSayi);
+
+          if (oyunDurumu.indexOf("") === -1) {
+            alert("Yapılabilecek bir hamle kalmadı!");
+            break;
+          }
+
+          if (oyunDurumu[rastgeleSayi] === "") {
+            const btnPC = document.getElementById(rastgeleSayi);
+            setTimeout(function () {
+              oyunDurumu[rastgeleSayi] = "O";
+              btnPC.innerHTML = "O";
+              btnPC.disabled = true;
+              btnPC.style.color = "black";
+              kazananKontrol(pcKazanmaSerisi);
+            }, 1000);
+
+            setTimeout(function () {
+              kazananKontrol(pcKazanmaSerisi);
+            }, 200);
+            break;
+          }
+        }
+
+        console.log(oyunDurumu);
+      }
+    </script>
+  </body>
+</html>
